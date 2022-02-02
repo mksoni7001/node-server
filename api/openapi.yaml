@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  description: This is a sample server Itemstore server. For this sample, you can use
+    the api key `special-key` to test the authorization filters.
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: OpenAPI Itemstore
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: http://localhost:8080
+tags:
+- description: Everything about your Items
+  name: item
+paths:
+  /item/search:
+    post:
+      description: Search items.
+      operationId: search
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startDate:          # <!--- form field name
+                  type: string
+                endDate:            # <!--- form field name
+                  type: string
+                minCount:           # <!--- form field name
+                  type: integer
+                maxCount:           # <!--- form field name
+                  type: integer
+              required:
+                - startDate
+                - endDate
+                - minCount
+                - maxCount
+      responses:
+        "200":
+          content:
+            application/xml:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Item'
+                type: array
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Item'
+                type: array
+          description: successful operation
+        "400":
+          description: Invalid tag value
+      summary: Finds Items by tags
+      x-eov-operation-handler: controllers/ItemController
+components:
+  requestBodies:
+    Item:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Item'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Item'
+      description: Item object that needs to be added to the store
+      required: true
+  schemas:
+    Item:
+      description: A item for sale in the item store
+      example:
+        key: TAKwGc6Jr4i8Z487
+        createdAt: "2017-01-28T01:22:14.398Z"
+        totalCount: 2800
+      properties:
+        key:
+          example: TAKwGc6Jr4i8Z487
+          type: string
+        createdAt:
+          example: "2017-01-28T01:22:14.398Z"
+          type: string
+        totalCount:
+          example: 2800
+          type: integer
+      required:
+      - totalCount
+      title: a Item
+      type: object
+      xml:
+        name: Item
+    ApiResponse:
+      description: Describes the result of uploading an image resource
+      example:
+        code: 0
+        type: type
+        message: message
+      properties:
+        code:
+          format: int32
+          type: integer
+        type:
+          type: string
+        message:
+          type: string
+      title: An uploaded response
+      type: object
+  securitySchemes:
+    api_key:
+      in: header
+      name: api_key
+      type: apiKey
