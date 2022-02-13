@@ -1,11 +1,11 @@
 openapi: 3.0.0
 info:
-  description: This is a sample server Itemstore server. For this sample, you can use
+  description: This is a sample server Recordstore server. For this sample, you can use
     the api key `special-key` to test the authorization filters.
   license:
     name: Apache-2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
-  title: OpenAPI Itemstore
+  title: OpenAPI Recordstore
   version: 1.0.0
 externalDocs:
   description: Find out more about Swagger
@@ -13,12 +13,12 @@ externalDocs:
 servers:
 - url: http://localhost:8080
 tags:
-- description: Everything about your Items
-  name: item
+- description: Everything about your Records
+  name: record
 paths:
-  /item/search:
+  /record/search:
     post:
-      description: Search items.
+      description: Search records.
       operationId: search
       requestBody: 
         required: true
@@ -46,33 +46,33 @@ paths:
             application/xml:
               schema:
                 items:
-                  $ref: '#/components/schemas/Item'
+                  $ref: '#/components/schemas/Record'
                 type: array
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Item'
+                  $ref: '#/components/schemas/Record'
                 type: array
           description: successful operation
         "400":
           description: Invalid tag value
-      summary: Finds Items by tags
-      x-eov-operation-handler: controllers/ItemController
+      summary: Finds Records by tags
+      x-eov-operation-handler: controllers/RecordController
 components:
   requestBodies:
-    Item:
+    Record:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Item'
+            $ref: '#/components/schemas/Record'
         application/xml:
           schema:
-            $ref: '#/components/schemas/Item'
-      description: Item object that needs to be added to the store
+            $ref: '#/components/schemas/Record'
+      description: Record object that needs to be added to the store
       required: true
   schemas:
-    Item:
-      description: A item for sale in the item store
+    Record:
+      description: A record for sale in the record store
       example:
         key: TAKwGc6Jr4i8Z487
         createdAt: "2017-01-28T01:22:14.398Z"
@@ -89,10 +89,10 @@ components:
           type: integer
       required:
       - totalCount
-      title: a Item
+      title: a Record
       type: object
       xml:
-        name: Item
+        name: Record
     ApiResponse:
       description: Describes the result of uploading an image resource
       example:

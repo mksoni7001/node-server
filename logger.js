@@ -1,12 +1,12 @@
+const mongoose = require('mongoose');
 const { transports, createLogger, format } = require('winston');
-
 const logger = createLogger({
   level: 'info',
   format: format.combine(
     format.timestamp(),
     format.json(),
   ),
-  defaultMeta: { service: 'item-service' },
+  defaultMeta: { service: 'record-service' },
   transports: [
     new transports.Console(),
     new transports.File({ filename: 'error.log', level: 'error', timestamp: true }),
@@ -16,6 +16,7 @@ const logger = createLogger({
 
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new transports.Console({ format: format.simple() }));
+  mongoose.set('debug', true);
 }
 
 module.exports = logger;

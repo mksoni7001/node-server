@@ -1,5 +1,5 @@
-const ItemController = require('./ItemController');
+const RecordController = require('./RecordController');
 
 module.exports = {
-  ItemController,
+  RecordController,
 };
