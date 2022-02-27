@@ -1,10 +1,11 @@
 const config = require('./config');
 const logger = require('./logger');
 const ExpressServer = require('./expressServer');
+const database = require('./database');
 
 const launchServer = async () => {
   try {
-    this.expressServer = new ExpressServer(config.URL_PORT, config.OPENAPI_YAML);
+    this.expressServer = new ExpressServer(config.URL_PORT, config.OPENAPI_YAML, database);
     this.expressServer.launch();
     logger.info('Express server running');
   } catch (error) {

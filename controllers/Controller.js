@@ -57,9 +57,6 @@ class Controller {
   }
 
   static getRequestBodyName(request) {
-    console.log(
-      "request.openapi.schema", request.openapi.schema
-    )
     const codeGenDefinedBodyName = request.openapi.schema['x-codegen-request-body-name'];
     if (codeGenDefinedBodyName !== undefined) {
       return codeGenDefinedBodyName;
@@ -75,9 +72,6 @@ class Controller {
     const requestParams = {};
     if (request.openapi.schema.requestBody !== undefined) {
       const { content } = request.openapi.schema.requestBody;
-      console.log(
-        "content", content
-      )
       if (content['application/json'] !== undefined) {
         const requestBodyName = camelCase(this.getRequestBodyName(request));
         requestParams[requestBodyName] = request.body;

@@ -16,6 +16,14 @@ tags:
 - description: Everything about your Records
   name: record
 paths:
+  /health:
+    get:
+      summary: health check
+      operationId: health
+      responses:
+        '200':
+          $ref: '#/components/responses/versionResponse'
+      x-eov-operation-handler: controllers/IndexController
   /record/search:
     post:
       description: Search records.
@@ -59,6 +67,13 @@ paths:
       summary: Finds Records by tags
       x-eov-operation-handler: controllers/RecordController
 components:
+  responses:
+    versionResponse:
+        description: Version response object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Version"
   requestBodies:
     Record:
       content:
@@ -71,6 +86,15 @@ components:
       description: Record object that needs to be added to the store
       required: true
   schemas:
+    Version:
+      type: object
+      required:
+        - version
+      properties:
+        version:
+          type: string
+          example: 1.23.45
+          pattern: ^\d\.\d\.\d$
     Record:
       description: A record for sale in the record store
       example:

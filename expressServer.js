@@ -11,27 +11,17 @@ const bodyParser = require('body-parser');
 const { OpenApiValidator } = require('express-openapi-validator');
 const logger = require('./logger');
 const config = require('./config');
-const mongoose = require("mongoose")
+const database = require("./database")
 
 class ExpressServer {
-  constructor(port, openApiYaml) {
+  constructor(port, openApiYaml, database) {
     this.port = port;
     this.app = express();
     this.openApiPath = openApiYaml;
+    this.database = database;
     
-    //database connection
-    mongoose.connect(config.MONGO_URI);
-
-    // Database connection is successful
-    mongoose.connection.on("connected", () => {
-      logger.info('Database is connected now');
-    });
-    // if there is an error, while connecting database
-    mongoose.connection.on("error", (err) => {
-      logger.error('Error while connecting to database', err);
-    });
     try {
-      this.schema = jsYaml.safeLoad(fs.readFileSync(openApiYaml));
+      this.schema = jsYaml.load(fs.readFileSync(openApiYaml));
     } catch (e) {
       logger.error('failed to start Express Server', e.message);
     }
@@ -48,12 +38,18 @@ class ExpressServer {
     
   }
 
-  launch() {
-    new OpenApiValidator({
+  prepareExpress(){
+    return new OpenApiValidator({
       apiSpec: this.openApiPath,
       operationHandlers: path.join(__dirname),
       fileUploader: { dest: config.FILE_UPLOAD_PATH },
     }).install(this.app)
+  }
+
+  async launch() {
+    //database connection
+    await this.database.connect()
+      this.prepareExpress()
       .catch(err => {
         logger.error("error occured:", err)
       })

@@ -10,26 +10,28 @@ const Service = require('./Service');
 * tags List Tags to filter by
 * returns List
 * */
-const search = ({ body }) => new Promise(
-  async (resolve, reject) => {
-    try {
-      Record.search(body, (err, records) => {
-        if(err) {
-          throw err
-        }
-        resolve(Service.successResponse({
-          code: 0, message: "Success", records
-        }));
-      })
-      
-    } catch (e) {
-      reject(Service.rejectResponse(
-        e.message || 'Invalid input',
-        e.status || 405,
-      ));
-    }
-  },
-);
+const search = ({ body }) => {
+  return new Promise(
+    async (resolve, reject) => {
+      try {
+        Record.search(body, (err, records) => {
+          if(err) {
+            throw err
+          }
+          resolve(Service.successResponse({
+            code: 0, message: "Success", records
+          }));
+        })
+        
+      } catch (e) {
+        reject(Service.rejectResponse(
+          e.message || 'Invalid input',
+          e.status || 405,
+        ));
+      }
+    },
+  );
+};
 
 
 module.exports = {
