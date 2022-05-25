@@ -35,6 +35,9 @@ class ExpressServer {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cookieParser());
+    if (process.env.NODE_ENV !== "production") {
+      this.app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(this.schema));
+    }
   }
 
   prepareExpress() {
